@@ -119,7 +119,8 @@ function PlaintextFilesChallenge() {
     //create a new file for the file to be modified
     var modifiedFile = new File(['' + newText], file.name, {
       type: fileType,
-      lastModified: new Date(Date.now())
+      lastModified: new Date(),
+      lastModifiedDate: new Date()
     })
 
     //find the file the user wants to overwrite and overwrite it

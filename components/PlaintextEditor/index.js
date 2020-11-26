@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import EdiText from 'react-editext'
-
 import css from './style.css'
 
 function PlaintextEditor({ file, write }) {
@@ -12,7 +11,7 @@ function PlaintextEditor({ file, write }) {
       setValue(await file.text())
     })()
   }, [file])
-  // 
+
   //user edits + saves lastModified
   const saveFile = fileText => {
     setValue(fileText)
