@@ -1,28 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
-import PropTypes from 'prop-types';
-import path from 'path';
-import classNames from 'classnames';
-
-import { listFiles } from '../files';
-
+import React, { useState, useEffect } from 'react'
+import Head from 'next/head'
+import PropTypes from 'prop-types'
+import path from 'path'
+import classNames from 'classnames'
+import { listFiles } from '../files'
 // Used below, these need to be registered
-import MarkdownEditor from '../MarkdownEditor';
-import PlaintextEditor from '../components/PlaintextEditor';
+import MarkdownEditor from '../MarkdownEditor'
+import PlaintextEditor from '../components/PlaintextEditor'
 
-import IconPlaintextSVG from '../public/icon-plaintext.svg';
-import IconMarkdownSVG from '../public/icon-markdown.svg';
-import IconJavaScriptSVG from '../public/icon-javascript.svg';
-import IconJSONSVG from '../public/icon-json.svg';
+import IconPlaintextSVG from '../public/icon-plaintext.svg'
+import IconMarkdownSVG from '../public/icon-markdown.svg'
+import IconJavaScriptSVG from '../public/icon-javascript.svg'
+import IconJSONSVG from '../public/icon-json.svg'
 
-import css from './style.module.css';
+import css from './style.module.css'
 
 const TYPE_TO_ICON = {
   'text/plain': IconPlaintextSVG,
   'text/markdown': IconMarkdownSVG,
   'text/javascript': IconJavaScriptSVG,
   'application/json': IconJSONSVG
-};
+}
 
 function FilesTable({ files, activeFile, setActiveFile }) {
   return (
@@ -67,58 +65,74 @@ function FilesTable({ files, activeFile, setActiveFile }) {
         </tbody>
       </table>
     </div>
-  );
+  )
 }
-
+//
 FilesTable.propTypes = {
   files: PropTypes.arrayOf(PropTypes.object),
   activeFile: PropTypes.object,
   setActiveFile: PropTypes.func
-};
+}
 
 function Previewer({ file }) {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState('')
 
   useEffect(() => {
-    (async () => {
-      setValue(await file.text());
-    })();
-  }, [file]);
+    ; (async () => {
+      setValue(await file.text())
+    })()
+  }, [file])
 
   return (
     <div className={css.preview}>
       <div className={css.title}>{path.basename(file.name)}</div>
       <div className={css.content}>{value}</div>
     </div>
-  );
+  )
 }
 
 Previewer.propTypes = {
   file: PropTypes.object
-};
+}
 
 // Uncomment keys to register editors for media types
 const REGISTERED_EDITORS = {
-  // "text/plain": PlaintextEditor,
-  // "text/markdown": MarkdownEditor,
-};
+  'text/plain': PlaintextEditor,
+  'text/markdown': MarkdownEditor,
+}
 
 function PlaintextFilesChallenge() {
-  const [files, setFiles] = useState([]);
-  const [activeFile, setActiveFile] = useState(null);
+  const [files, setFiles] = useState([])
+  const [activeFile, setActiveFile] = useState(null)
 
   useEffect(() => {
-    const files = listFiles();
-    setFiles(files);
-  }, []);
+    const files = listFiles()
+    setFiles(files)
+  }, [])
 
-  const write = file => {
-    console.log('Writing soon... ', file.name);
+  //write function for editing files
+  const write = (file, newText, fileType) => {
+    //get the group of files
+    const newFiles = { files }
+    const newFilesList = newFiles.files
 
-    // TODO: Write the file to the `files` array
-  };
+    //create a new file for the file to be modified
+    var modifiedFile = new File(['' + newText], file.name, {
+      type: fileType,
+      lastModified: new Date(Date.now())
+    })
 
-  const Editor = activeFile ? REGISTERED_EDITORS[activeFile.type] : null;
+    //find the file the user wants to overwrite and overwrite it
+    newFilesList.forEach(element => {
+      if (element.name === file.name) {
+        element = modifiedFile
+      }
+    });
+    //set the Files List to the updated Files List
+    setFiles(newFilesList)
+  }
+
+  const Editor = activeFile ? REGISTERED_EDITORS[activeFile.type] : null
 
   return (
     <div className={css.page}>
@@ -128,10 +142,10 @@ function PlaintextFilesChallenge() {
       <aside>
         <header>
           <div className={css.tagline}>Rethink Engineering Challenge</div>
-          <h1>Fun With Plaintext</h1>
+          <h1>Seasoning Plaintext</h1>
           <div className={css.description}>
-            Let{"'"}s explore files in JavaScript. What could be more fun than
-            rendering and editing plaintext? Not much, as it turns out.
+            Let{"'"}s have fun with files and JavaScript. What could be more fun
+            than rendering and editing plaintext? Not much, as it turns out.
           </div>
         </header>
 
@@ -145,7 +159,7 @@ function PlaintextFilesChallenge() {
 
         <footer>
           <div className={css.link}>
-            <a href="https://v3.rethink.software/jobs">Rethink Software</a>
+            <a href='https://rethink.software'>Rethink Software</a>
             &nbsp;—&nbsp;Frontend Engineering Challenge
           </div>
           <div className={css.link}>
@@ -167,7 +181,7 @@ function PlaintextFilesChallenge() {
         )}
       </main>
     </div>
-  );
+  )
 }
 
-export default PlaintextFilesChallenge;
+export default PlaintextFilesChallenge

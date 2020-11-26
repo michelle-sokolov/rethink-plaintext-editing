@@ -92,3 +92,7 @@ export default initialValue => {
 
   return [guide, plain, water, fancy, javascript, json];
 }
+/*export function updateFile(filename, file) {
+  fileHandler.setFileText(filename, file.text())
+  fileHandler.setLastModifiedDate(file.lastModified);
+}*/
